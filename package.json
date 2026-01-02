@@ -1,0 +1,54 @@
+{
+  "name": "@zentla/sdk",
+  "version": "0.1.0",
+  "description": "Official TypeScript SDK for Zentla - subscription management API",
+  "author": "PrimeCodeLabs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PrimeCodeLabs/zentla-sdk.git"
+  },
+  "homepage": "https://zentla-web.pages.dev/docs",
+  "bugs": {
+    "url": "https://github.com/PrimeCodeLabs/zentla-sdk/issues"
+  },
+  "keywords": [
+    "zentla",
+    "subscription",
+    "billing",
+    "saas",
+    "api",
+    "sdk",
+    "typescript"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest",
+    "lint": "eslint src/",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
