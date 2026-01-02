@@ -13,18 +13,24 @@ import type {
   CreateWebhookEndpointInput,
 } from "./types";
 
-export interface RelayClientConfig {
+export interface ZentlaClientConfig {
   apiKey: string;
   baseUrl?: string;
+  timeout?: number;
+  retries?: number;
 }
 
-export class RelayClient {
+export class ZentlaClient {
   private readonly apiKey: string;
   private readonly baseUrl: string;
+  private readonly timeout: number;
+  private readonly retries: number;
 
-  constructor(config: RelayClientConfig) {
+  constructor(config: ZentlaClientConfig) {
     this.apiKey = config.apiKey;
     this.baseUrl = config.baseUrl ?? "https://api.zentla.dev/api/v1";
+    this.timeout = config.timeout ?? 30000;
+    this.retries = config.retries ?? 3;
   }
 
   private async request<T>(
@@ -32,29 +38,56 @@ export class RelayClient {
     path: string,
     body?: unknown,
   ): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${path}`, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${this.apiKey}`,
-      },
-      body: body ? JSON.stringify(body) : undefined,
-    });
+    let lastError: Error | null = null;
 
-    if (!response.ok) {
-      const error = (await response.json().catch(() => ({}))) as {
-        message?: string;
-        code?: string;
-      };
-      throw new RelayError(
-        error.message ?? `HTTP ${response.status}`,
-        response.status,
-        error.code,
-      );
+    for (let attempt = 0; attempt <= this.retries; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+
+        const response = await fetch(`${this.baseUrl}${path}`, {
+          method,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.apiKey}`,
+          },
+          body: body ? JSON.stringify(body) : undefined,
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          const error = (await response.json().catch(() => ({}))) as {
+            message?: string;
+            code?: string;
+          };
+          throw new ZentlaError(
+            error.message ?? `HTTP ${response.status}`,
+            response.status,
+            error.code,
+          );
+        }
+
+        const json = await response.json();
+        if ("hasMore" in json) return json as T;
+        return (json as { data?: T }).data ?? (json as T);
+      } catch (err) {
+        lastError = err as Error;
+        const isRetryable =
+          err instanceof ZentlaError
+            ? err.status >= 500 || err.status === 429
+            : (err as Error).name === "AbortError";
+
+        if (!isRetryable || attempt === this.retries) throw err;
+
+        await new Promise((r) =>
+          setTimeout(r, Math.min(1000 * 2 ** attempt, 10000))
+        );
+      }
     }
 
-    const data = (await response.json()) as { data?: T } | T;
-    return (data as { data?: T }).data ?? (data as T);
+    throw lastError;
   }
 
   // Offers
@@ -204,13 +237,13 @@ export class RelayClient {
   };
 }
 
-export class RelayError extends Error {
+export class ZentlaError extends Error {
   constructor(
     message: string,
     public readonly status: number,
     public readonly code?: string,
   ) {
     super(message);
-    this.name = "RelayError";
+    this.name = "ZentlaError";
   }
 }

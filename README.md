@@ -1,6 +1,12 @@
 # @zentla/sdk
 
-Official TypeScript SDK for [Zentla](https://zentla-web.pages.dev) - the open source subscription management API.
+<p align="center">
+  <img src="https://zentla-web.pages.dev/favicon.svg" alt="Zentla" width="80" height="80">
+</p>
+
+<p align="center">
+  Official TypeScript SDK for <a href="https://zentla-web.pages.dev">Zentla</a> - subscription management for modern apps.
+</p>
 
 ## Installation
 
@@ -15,18 +21,18 @@ import { ZentlaClient } from "@zentla/sdk";
 
 const zentla = new ZentlaClient({
   apiKey: process.env.ZENTLA_API_KEY,
-  baseUrl: "https://api.zentla.dev", // or your self-hosted URL
 });
 
-// Get customer entitlements
-const entitlements = await zentla.entitlements.check("customer_123");
+// Check customer entitlements
+const { entitlements } = await zentla.customers.getEntitlements("customer_123");
 
-if (entitlements.hasAccess("premium_features")) {
+const premiumFeature = entitlements.find((e) => e.featureKey === "premium_features");
+if (premiumFeature?.hasAccess) {
   // Grant access to premium features
 }
 
-// List customer subscriptions
-const subscriptions = await zentla.subscriptions.list("customer_123");
+// List subscriptions for a customer
+const subscriptions = await zentla.subscriptions.list({ customerId: "customer_123" });
 ```
 
 ## Features
@@ -65,12 +71,14 @@ const sub = await zentla.subscriptions.get("sub_789");
 ### Entitlements
 
 ```typescript
-// Check entitlements
-const entitlements = await zentla.entitlements.check("customer_123");
+// Get all entitlements for a customer
+const { entitlements } = await zentla.customers.getEntitlements("customer_123");
 
 // Check specific feature
-const hasFeature = entitlements.hasAccess("api_access");
-const apiLimit = entitlements.getValue("api_calls_per_month");
+const feature = await zentla.customers.checkEntitlement("customer_123", "api_access");
+if (feature.hasAccess) {
+  console.log("Access granted, value:", feature.value);
+}
 ```
 
 ### Checkout
@@ -105,9 +113,9 @@ const isValid = verifyWebhookSignature(
 ```typescript
 const zentla = new ZentlaClient({
   apiKey: "zentla_live_...", // Required
-  baseUrl: "https://api.zentla.dev", // Optional, defaults to Zentla Cloud
-  timeout: 30000, // Optional, request timeout in ms
-  retries: 3, // Optional, number of retries
+  baseUrl: "https://api.zentla.dev/api/v1", // Optional, defaults to Zentla Cloud
+  timeout: 30000, // Optional, request timeout in ms (default: 30000)
+  retries: 3, // Optional, number of retries on 5xx/timeout (default: 3)
 });
 ```
 
