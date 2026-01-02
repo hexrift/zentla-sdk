@@ -71,7 +71,7 @@ const customer = await zentla.customers.create({
 
 ```typescript
 // List subscriptions
-const subs = await zentla.subscriptions.list("customer_123");
+const subs = await zentla.subscriptions.list({ customerId: "customer_123" });
 
 // Get subscription details
 const sub = await zentla.subscriptions.get("sub_789");
@@ -94,14 +94,14 @@ if (feature.hasAccess) {
 
 ```typescript
 // Create checkout session
-const checkout = await zentla.checkout.create({
+const checkout = await zentla.checkout.createSession({
   customerId: "customer_123",
   offerId: "offer_pro_monthly",
   successUrl: "https://app.example.com/success",
   cancelUrl: "https://app.example.com/cancel",
 });
 
-// Redirect user to checkout.url
+// Redirect user to checkout.sessionUrl
 ```
 
 ### Webhooks
