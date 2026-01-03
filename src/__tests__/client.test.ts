@@ -161,7 +161,7 @@ describe("ZentlaClient", () => {
 
   describe("checkout", () => {
     it("should create checkout session", async () => {
-      const mockCheckout = { id: "ch_123", sessionUrl: "https://checkout.stripe.com/..." };
+      const mockCheckout = { id: "ch_123", sessionUrl: "https://checkout.example.com/session/..." };
 
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
