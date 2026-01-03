@@ -74,11 +74,11 @@ export interface Subscription {
   status:
     | "trialing"
     | "active"
-    | "past_due"
+    | "payment_failed"
     | "canceled"
-    | "unpaid"
-    | "incomplete"
-    | "incomplete_expired"
+    | "suspended"
+    | "pending"
+    | "expired"
     | "paused";
   currentPeriodStart: string;
   currentPeriodEnd: string;
