@@ -132,6 +132,29 @@ const zentla = new ZentlaClient({
 
 Full documentation available at [zentla-web.pages.dev/docs](https://zentla-web.pages.dev/docs)
 
+## Changelog
+
+### v0.2.0 (Breaking Changes)
+
+Subscription status values have been updated to use Zentla-native terminology:
+
+| Old Value (v0.1.x) | New Value (v0.2.0) |
+|--------------------|---------------------|
+| `past_due` | `payment_failed` |
+| `incomplete` | `pending` |
+| `incomplete_expired` | `expired` |
+| `unpaid` | `suspended` |
+
+**Migration:** Update any code that filters or checks subscription status:
+
+```typescript
+// Before (v0.1.x)
+if (subscription.status === "past_due") { ... }
+
+// After (v0.2.0)
+if (subscription.status === "payment_failed") { ... }
+```
+
 ## License
 
 MIT
