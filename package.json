@@ -1,6 +1,6 @@
 {
   "name": "@zentla/sdk",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Official TypeScript SDK for Zentla - subscription management API",
   "author": "PrimeCodeLabs",
   "license": "MIT",
