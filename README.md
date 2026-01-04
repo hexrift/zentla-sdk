@@ -1,11 +1,11 @@
 # @zentla/sdk
 
 <p align="center">
-  <img src="https://zentla-web.pages.dev/favicon.svg" alt="Zentla" width="80" height="80">
+  <img src="https://zentla.dev/favicon.svg" alt="Zentla" width="80" height="80">
 </p>
 
 <p align="center">
-  Official TypeScript SDK for <a href="https://zentla-web.pages.dev">Zentla</a> - subscription management for modern apps.
+  Official TypeScript SDK for <a href="https://zentla.dev">Zentla</a> - subscription management for modern apps.
 </p>
 
 <p align="center">
@@ -130,7 +130,7 @@ const zentla = new ZentlaClient({
 
 ## Documentation
 
-Full documentation available at [zentla-web.pages.dev/docs](https://zentla-web.pages.dev/docs)
+Full documentation available at [zentla.dev/docs](https://zentla.dev/docs)
 
 ## Changelog
 
