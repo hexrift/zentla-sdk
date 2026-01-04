@@ -1,7 +1,7 @@
 # @hexrift/zentla-sdk
 
 <p align="center">
-  <img src="https://zentla.dev/favicon.svg" alt="Zentla" width="80" height="80">
+  <img src="https://raw.githubusercontent.com/hexrift/zentla-sdk/main/assets/logo.svg" alt="Zentla" width="80" height="80">
 </p>
 
 <p align="center">
