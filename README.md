@@ -10,9 +10,9 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@zentla/sdk"><img src="https://img.shields.io/npm/v/@zentla/sdk.svg" alt="npm version"></a>
-  <a href="https://github.com/PrimeCodeLabs/zentla-sdk/actions/workflows/ci.yml"><img src="https://github.com/PrimeCodeLabs/zentla-sdk/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://codecov.io/gh/PrimeCodeLabs/zentla-sdk"><img src="https://codecov.io/gh/PrimeCodeLabs/zentla-sdk/branch/main/graph/badge.svg" alt="codecov"></a>
-  <a href="https://github.com/PrimeCodeLabs/zentla-sdk/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/@zentla/sdk.svg" alt="license"></a>
+  <a href="https://github.com/hexrift/zentla-sdk/actions/workflows/ci.yml"><img src="https://github.com/hexrift/zentla-sdk/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://codecov.io/gh/hexrift/zentla-sdk"><img src="https://codecov.io/gh/hexrift/zentla-sdk/branch/main/graph/badge.svg" alt="codecov"></a>
+  <a href="https://github.com/hexrift/zentla-sdk/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/@zentla/sdk.svg" alt="license"></a>
   <a href="https://www.npmjs.com/package/@zentla/sdk"><img src="https://img.shields.io/npm/dm/@zentla/sdk.svg" alt="downloads"></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.0+-blue.svg" alt="TypeScript"></a>
 </p>
