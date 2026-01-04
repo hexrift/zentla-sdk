@@ -1,6 +1,6 @@
 {
   "name": "@hexrift/zentla-sdk",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Official TypeScript SDK for Zentla - subscription management API",
   "author": "hexrift",
   "license": "MIT",
