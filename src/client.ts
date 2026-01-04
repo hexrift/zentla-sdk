@@ -11,6 +11,17 @@ import type {
   CreateCustomerInput,
   CreateCheckoutInput,
   CreateWebhookEndpointInput,
+  UsageEvent,
+  UsageMetric,
+  UsageSummary,
+  IngestEventInput,
+  IngestEventResult,
+  IngestBatchResult,
+  CreateMetricInput,
+  Promotion,
+  PromotionVersion,
+  CreatePromotionInput,
+  ValidatePromotionResult,
 } from "./types";
 
 export interface ZentlaClientConfig {
@@ -234,6 +245,131 @@ export class ZentlaClient {
 
     rotateSecret: (id: string): Promise<{ secret: string }> =>
       this.request("POST", `/webhook-endpoints/${id}/rotate-secret`),
+  };
+
+  // Usage Metering
+  readonly usage = {
+    ingest: (input: IngestEventInput): Promise<IngestEventResult> =>
+      this.request("POST", "/usage/events", input),
+
+    ingestBatch: (events: IngestEventInput[]): Promise<IngestBatchResult> =>
+      this.request("POST", "/usage/events/batch", { events }),
+
+    listEvents: (params?: {
+      customerId?: string;
+      subscriptionId?: string;
+      metricKey?: string;
+      startDate?: string;
+      endDate?: string;
+      limit?: number;
+      cursor?: string;
+    }): Promise<PaginatedResponse<UsageEvent>> => {
+      const query = new URLSearchParams();
+      if (params?.customerId) query.set("customerId", params.customerId);
+      if (params?.subscriptionId)
+        query.set("subscriptionId", params.subscriptionId);
+      if (params?.metricKey) query.set("metricKey", params.metricKey);
+      if (params?.startDate) query.set("startDate", params.startDate);
+      if (params?.endDate) query.set("endDate", params.endDate);
+      if (params?.limit) query.set("limit", params.limit.toString());
+      if (params?.cursor) query.set("cursor", params.cursor);
+      return this.request("GET", `/usage/events?${query}`);
+    },
+
+    getSummary: (
+      customerId: string,
+      metricKey: string,
+      periodStart: string,
+      periodEnd: string,
+    ): Promise<UsageSummary> => {
+      const query = new URLSearchParams({
+        periodStart,
+        periodEnd,
+      });
+      return this.request(
+        "GET",
+        `/usage/summary/${customerId}/${metricKey}?${query}`,
+      );
+    },
+
+    getCurrentPeriodUsage: (
+      subscriptionId: string,
+      metricKey: string,
+    ): Promise<UsageSummary> =>
+      this.request(
+        "GET",
+        `/usage/subscriptions/${subscriptionId}/current/${metricKey}`,
+      ),
+
+    createMetric: (input: CreateMetricInput): Promise<UsageMetric> =>
+      this.request("POST", "/usage/metrics", input),
+
+    listMetrics: (): Promise<UsageMetric[]> =>
+      this.request("GET", "/usage/metrics"),
+  };
+
+  // Promotions
+  readonly promotions = {
+    list: (params?: {
+      limit?: number;
+      cursor?: string;
+      status?: "active" | "archived";
+      search?: string;
+    }): Promise<PaginatedResponse<Promotion>> => {
+      const query = new URLSearchParams();
+      if (params?.limit) query.set("limit", params.limit.toString());
+      if (params?.cursor) query.set("cursor", params.cursor);
+      if (params?.status) query.set("status", params.status);
+      if (params?.search) query.set("search", params.search);
+      return this.request("GET", `/promotions?${query}`);
+    },
+
+    get: (id: string): Promise<Promotion & { versions: PromotionVersion[] }> =>
+      this.request("GET", `/promotions/${id}`),
+
+    create: (input: CreatePromotionInput): Promise<Promotion> =>
+      this.request("POST", "/promotions", input),
+
+    update: (
+      id: string,
+      input: { name?: string; description?: string },
+    ): Promise<Promotion> => this.request("PATCH", `/promotions/${id}`, input),
+
+    archive: (id: string): Promise<Promotion> =>
+      this.request("POST", `/promotions/${id}/archive`),
+
+    getVersions: (id: string): Promise<PromotionVersion[]> =>
+      this.request("GET", `/promotions/${id}/versions`),
+
+    createVersion: (
+      id: string,
+      config: CreatePromotionInput["config"],
+    ): Promise<PromotionVersion> =>
+      this.request("POST", `/promotions/${id}/versions`, { config }),
+
+    publish: (id: string, versionId?: string): Promise<Promotion> =>
+      this.request("POST", `/promotions/${id}/publish`, { versionId }),
+
+    validate: (
+      code: string,
+      offerId?: string,
+      customerId?: string,
+      orderAmount?: number,
+    ): Promise<ValidatePromotionResult> =>
+      this.request("POST", "/promotions/validate", {
+        code,
+        offerId,
+        customerId,
+        orderAmount,
+      }),
+
+    getUsage: (
+      id: string,
+    ): Promise<{
+      promotionId: string;
+      redemptionCount: number;
+      totalDiscountAmount: number;
+    }> => this.request("GET", `/promotions/${id}/usage`),
   };
 }
 

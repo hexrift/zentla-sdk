@@ -5,7 +5,11 @@
 </p>
 
 <p align="center">
-  Official TypeScript SDK for <a href="https://zentla.dev">Zentla</a> - the open source monetization layer for SaaS.
+  <strong>Billing you control</strong>
+</p>
+
+<p align="center">
+  Official TypeScript SDK for <a href="https://zentla.dev">Zentla</a> — open source entitlements, metering, and billing.
 </p>
 
 <p align="center">
@@ -46,10 +50,12 @@ const subscriptions = await zentla.subscriptions.list({ customerId: "customer_12
 
 ## Features
 
+- **Entitlements** — Check feature access and quotas in real-time
+- **Usage Metering** — Track and aggregate usage events for billing
+- **Multi-Provider** — Works with Stripe, Zuora, or self-hosted Zentla
 - Full TypeScript support with generated types
 - Automatic retries with exponential backoff
 - Webhook signature verification
-- Works with Zentla Cloud or self-hosted
 
 ## API Reference
 
@@ -102,6 +108,64 @@ const checkout = await zentla.checkout.createSession({
 });
 
 // Redirect user to checkout.sessionUrl
+```
+
+### Usage Metering
+
+```typescript
+// Track usage events for usage-based billing
+await zentla.usage.ingest({
+  customerId: "customer_123",
+  metricKey: "api_calls",
+  quantity: 1,
+  idempotencyKey: "evt_abc123", // Prevent duplicates
+});
+
+// Batch ingest for high-volume tracking
+await zentla.usage.ingestBatch([
+  { customerId: "customer_123", metricKey: "api_calls", quantity: 100 },
+  { customerId: "customer_456", metricKey: "storage_gb", quantity: 5.5 },
+]);
+
+// Get usage summary for a customer
+const summary = await zentla.usage.getSummary(
+  "customer_123",
+  "api_calls",
+  "2024-01-01T00:00:00Z",
+  "2024-01-31T23:59:59Z"
+);
+// { metricKey: "api_calls", totalQuantity: 15420, eventCount: 892, ... }
+
+// Get current billing period usage for a subscription
+const currentUsage = await zentla.usage.getCurrentPeriodUsage(
+  "sub_789",
+  "api_calls"
+);
+```
+
+### Promotions
+
+```typescript
+// Create a promotion code
+const promo = await zentla.promotions.create({
+  code: "SUMMER25",
+  name: "Summer Sale 2024",
+  config: {
+    discountType: "percent",
+    discountValue: 25,
+    maxRedemptions: 100,
+    validUntil: "2024-08-31T23:59:59Z",
+  },
+});
+
+// Publish the promotion
+await zentla.promotions.publish(promo.id);
+
+// Validate a promo code before checkout
+const validation = await zentla.promotions.validate("SUMMER25", offerId);
+if (validation.valid) {
+  console.log("Discount:", validation.discountPreview);
+}
 ```
 
 ### Webhooks
