@@ -304,7 +304,7 @@ export class ZentlaClient {
     createMetric: (input: CreateMetricInput): Promise<UsageMetric> =>
       this.request("POST", "/usage/metrics", input),
 
-    listMetrics: (): Promise<{ data: UsageMetric[] }> =>
+    listMetrics: (): Promise<UsageMetric[]> =>
       this.request("GET", "/usage/metrics"),
   };
 
@@ -338,7 +338,7 @@ export class ZentlaClient {
     archive: (id: string): Promise<Promotion> =>
       this.request("POST", `/promotions/${id}/archive`),
 
-    getVersions: (id: string): Promise<{ data: PromotionVersion[] }> =>
+    getVersions: (id: string): Promise<PromotionVersion[]> =>
       this.request("GET", `/promotions/${id}/versions`),
 
     createVersion: (
