@@ -2,15 +2,15 @@
   "name": "@zentla/sdk",
   "version": "0.2.0",
   "description": "Official TypeScript SDK for Zentla - subscription management API",
-  "author": "PrimeCodeLabs",
+  "author": "hexrift",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/PrimeCodeLabs/zentla-sdk.git"
+    "url": "https://github.com/hexrift/zentla-sdk.git"
   },
-  "homepage": "https://zentla-web.pages.dev/docs",
+  "homepage": "https://zentla.dev/docs",
   "bugs": {
-    "url": "https://github.com/PrimeCodeLabs/zentla-sdk/issues"
+    "url": "https://github.com/hexrift/zentla-sdk/issues"
   },
   "keywords": [
     "zentla",
