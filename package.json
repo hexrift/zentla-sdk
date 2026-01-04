@@ -1,6 +1,6 @@
 {
   "name": "@hexrift/zentla-sdk",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Official TypeScript SDK for Zentla — open source entitlements, metering, and billing",
   "author": "hexrift",
   "license": "MIT",
