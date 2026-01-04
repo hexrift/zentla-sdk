@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  Official TypeScript SDK for <a href="https://zentla.dev">Zentla</a> - subscription management for modern apps.
+  Official TypeScript SDK for <a href="https://zentla.dev">Zentla</a> - the open source monetization layer for SaaS.
 </p>
 
 <p align="center">
