@@ -1,4 +1,4 @@
-# @zentla/sdk
+# @hexrift/zentla-sdk
 
 <p align="center">
   <img src="https://zentla.dev/favicon.svg" alt="Zentla" width="80" height="80">
@@ -9,24 +9,24 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@zentla/sdk"><img src="https://img.shields.io/npm/v/@zentla/sdk.svg" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@hexrift/zentla-sdk"><img src="https://img.shields.io/npm/v/@hexrift/zentla-sdk.svg" alt="npm version"></a>
   <a href="https://github.com/hexrift/zentla-sdk/actions/workflows/ci.yml"><img src="https://github.com/hexrift/zentla-sdk/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://codecov.io/gh/hexrift/zentla-sdk"><img src="https://codecov.io/gh/hexrift/zentla-sdk/branch/main/graph/badge.svg" alt="codecov"></a>
-  <a href="https://github.com/hexrift/zentla-sdk/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/@zentla/sdk.svg" alt="license"></a>
-  <a href="https://www.npmjs.com/package/@zentla/sdk"><img src="https://img.shields.io/npm/dm/@zentla/sdk.svg" alt="downloads"></a>
+  <a href="https://github.com/hexrift/zentla-sdk/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/@hexrift/zentla-sdk.svg" alt="license"></a>
+  <a href="https://www.npmjs.com/package/@hexrift/zentla-sdk"><img src="https://img.shields.io/npm/dm/@hexrift/zentla-sdk.svg" alt="downloads"></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.0+-blue.svg" alt="TypeScript"></a>
 </p>
 
 ## Installation
 
 ```bash
-npm install @zentla/sdk
+npm install @hexrift/zentla-sdk
 ```
 
 ## Quick Start
 
 ```typescript
-import { ZentlaClient } from "@zentla/sdk";
+import { ZentlaClient } from "@hexrift/zentla-sdk";
 
 const zentla = new ZentlaClient({
   apiKey: process.env.ZENTLA_API_KEY,
@@ -107,7 +107,7 @@ const checkout = await zentla.checkout.createSession({
 ### Webhooks
 
 ```typescript
-import { verifyWebhookSignature } from "@zentla/sdk";
+import { verifyWebhookSignature } from "@hexrift/zentla-sdk";
 
 // In your webhook handler
 const isValid = verifyWebhookSignature(
