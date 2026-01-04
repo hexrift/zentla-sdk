@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/hexrift/zentla-sdk/compare/v1.1.0...v1.1.1) (2026-01-04)
+
+
+### Bug Fixes
+
+* use raw GitHub URL for logo to avoid npm caching issues ([#9](https://github.com/hexrift/zentla-sdk/issues/9)) ([71c6010](https://github.com/hexrift/zentla-sdk/commit/71c6010ad76efee3ed076601f1e7e287e5cfa377))
+
 ## [1.1.0](https://github.com/hexrift/zentla-sdk/compare/v1.0.0...v1.1.0) (2026-01-04)
 
 
