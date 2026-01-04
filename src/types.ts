@@ -166,3 +166,120 @@ export interface CreateWebhookEndpointInput {
   description?: string;
   metadata?: Record<string, unknown>;
 }
+
+// Usage Metering Types
+export interface UsageEvent {
+  id: string;
+  workspaceId: string;
+  customerId: string;
+  subscriptionId?: string;
+  metricKey: string;
+  quantity: number;
+  timestamp: string;
+  idempotencyKey?: string;
+  properties?: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface UsageMetric {
+  id: string;
+  workspaceId: string;
+  key: string;
+  name: string;
+  description?: string;
+  unit?: string;
+  aggregation: "sum" | "max" | "count" | "last";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UsageSummary {
+  metricKey: string;
+  totalQuantity: number;
+  eventCount: number;
+  periodStart: string;
+  periodEnd: string;
+}
+
+export interface IngestEventInput {
+  customerId: string;
+  subscriptionId?: string;
+  metricKey: string;
+  quantity: number;
+  timestamp?: string;
+  idempotencyKey?: string;
+  properties?: Record<string, unknown>;
+}
+
+export interface IngestEventResult {
+  id: string;
+  deduplicated: boolean;
+}
+
+export interface IngestBatchResult {
+  ingested: number;
+  deduplicated: number;
+}
+
+export interface CreateMetricInput {
+  key: string;
+  name: string;
+  description?: string;
+  unit?: string;
+  aggregation?: "sum" | "max" | "count" | "last";
+}
+
+// Promotion Types
+export interface Promotion {
+  id: string;
+  workspaceId: string;
+  code: string;
+  name: string;
+  description?: string;
+  status: "active" | "archived";
+  currentVersionId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PromotionVersion {
+  id: string;
+  promotionId: string;
+  version: number;
+  status: "draft" | "published" | "archived";
+  config: PromotionConfig;
+  publishedAt?: string;
+  createdAt: string;
+}
+
+export interface PromotionConfig {
+  discountType: "percent" | "fixed_amount" | "free_trial_days";
+  discountValue: number;
+  currency?: string;
+  duration?: "once" | "repeating" | "forever";
+  durationInMonths?: number;
+  maxRedemptions?: number;
+  maxRedemptionsPerCustomer?: number;
+  minimumAmount?: number;
+  validFrom?: string;
+  validUntil?: string;
+  applicableOfferIds?: string[];
+}
+
+export interface CreatePromotionInput {
+  code: string;
+  name: string;
+  description?: string;
+  config: PromotionConfig;
+}
+
+export interface ValidatePromotionResult {
+  valid: boolean;
+  promotion?: Promotion;
+  discountPreview?: {
+    type: "percent" | "fixed_amount" | "free_trial_days";
+    value: number;
+    calculatedAmount?: number;
+  };
+  invalidReason?: string;
+}

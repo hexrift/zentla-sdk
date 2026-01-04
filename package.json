@@ -1,7 +1,7 @@
 {
   "name": "@hexrift/zentla-sdk",
   "version": "1.0.0",
-  "description": "Official TypeScript SDK for Zentla - subscription management API",
+  "description": "Official TypeScript SDK for Zentla — open source entitlements, metering, and billing",
   "author": "hexrift",
   "license": "MIT",
   "repository": {
@@ -14,9 +14,14 @@
   },
   "keywords": [
     "zentla",
-    "subscription",
     "billing",
+    "entitlements",
+    "metering",
+    "usage-based-billing",
+    "subscription",
     "saas",
+    "stripe",
+    "zuora",
     "api",
     "sdk",
     "typescript"
