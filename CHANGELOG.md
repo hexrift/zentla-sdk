@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/hexrift/zentla-sdk/compare/v1.1.0...v1.2.0) (2026-01-06)
+
+
+### Features
+
+* add headless checkout support ([#11](https://github.com/hexrift/zentla-sdk/issues/11)) ([131f754](https://github.com/hexrift/zentla-sdk/commit/131f7547acb814812773ac773c661a876074965b))
+
 ## [1.1.0](https://github.com/hexrift/zentla-sdk/compare/v1.0.0...v1.1.0) (2026-01-04)
 
 
