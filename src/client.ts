@@ -4,12 +4,16 @@ import type {
   Customer,
   Subscription,
   Checkout,
+  CheckoutQuote,
+  CheckoutIntent,
   WebhookEndpoint,
   EntitlementCheck,
   PaginatedResponse,
   CreateOfferInput,
   CreateCustomerInput,
   CreateCheckoutInput,
+  CreateQuoteInput,
+  CreateIntentInput,
   CreateWebhookEndpointInput,
   UsageEvent,
   UsageMetric,
@@ -49,6 +53,15 @@ export class ZentlaClient {
     path: string,
     body?: unknown,
   ): Promise<T> {
+    return this.requestWithHeaders(method, path, body);
+  }
+
+  private async requestWithHeaders<T>(
+    method: string,
+    path: string,
+    body?: unknown,
+    extraHeaders?: Record<string, string>,
+  ): Promise<T> {
     let lastError: Error | null = null;
 
     for (let attempt = 0; attempt <= this.retries; attempt++) {
@@ -61,6 +74,7 @@ export class ZentlaClient {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${this.apiKey}`,
+            ...extraHeaders,
           },
           body: body ? JSON.stringify(body) : undefined,
           signal: controller.signal,
@@ -212,11 +226,58 @@ export class ZentlaClient {
 
   // Checkout
   readonly checkout = {
+    // Hosted checkout sessions
     createSession: (input: CreateCheckoutInput): Promise<Checkout> =>
       this.request("POST", "/checkout/sessions", input),
 
     getSession: (id: string): Promise<Checkout> =>
       this.request("GET", `/checkout/sessions/${id}`),
+
+    listSessions: (params?: {
+      limit?: number;
+      cursor?: string;
+      status?: "pending" | "completed" | "expired";
+    }): Promise<PaginatedResponse<Checkout>> => {
+      const query = new URLSearchParams();
+      if (params?.limit) query.set("limit", params.limit.toString());
+      if (params?.cursor) query.set("cursor", params.cursor);
+      if (params?.status) query.set("status", params.status);
+      return this.request("GET", `/checkout/sessions?${query}`);
+    },
+
+    // Headless checkout - quotes
+    createQuote: (input: CreateQuoteInput): Promise<CheckoutQuote> =>
+      this.request("POST", "/checkout/quotes", input),
+
+    // Headless checkout - intents
+    createIntent: (
+      input: CreateIntentInput,
+      idempotencyKey?: string,
+    ): Promise<CheckoutIntent> =>
+      this.requestWithHeaders("POST", "/checkout/intents", input, {
+        ...(idempotencyKey && { "Idempotency-Key": idempotencyKey }),
+      }),
+
+    getIntent: (id: string): Promise<CheckoutIntent> =>
+      this.request("GET", `/checkout/intents/${id}`),
+
+    listIntents: (params?: {
+      limit?: number;
+      cursor?: string;
+      status?:
+        | "pending"
+        | "processing"
+        | "requires_action"
+        | "succeeded"
+        | "failed"
+        | "expired";
+    }): Promise<PaginatedResponse<CheckoutIntent>> => {
+      const query = new URLSearchParams();
+      if (params?.limit) query.set("limit", params.limit.toString());
+      if (params?.cursor) query.set("cursor", params.cursor);
+      if (params?.status) query.set("status", params.status);
+      return this.request("GET", `/checkout/intents?${query}`);
+    },
   };
 
   // Webhook Endpoints

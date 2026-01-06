@@ -156,6 +156,77 @@ export interface CreateCheckoutInput {
   successUrl: string;
   cancelUrl: string;
   allowPromotionCodes?: boolean;
+  promotionCode?: string;
+  trialDays?: number;
+  metadata?: Record<string, unknown>;
+}
+
+// Headless Checkout Types
+export interface CheckoutQuote {
+  offerId: string;
+  offerVersionId: string;
+  currency: string;
+  subtotal: number;
+  discount: number;
+  tax: number;
+  total: number;
+  interval?: "day" | "week" | "month" | "year";
+  intervalCount: number;
+  trial?: {
+    days: number;
+    requiresPaymentMethod: boolean;
+  };
+  promotion?: {
+    id: string;
+    code: string;
+    discountType: "percent" | "fixed_amount";
+    discountValue: number;
+    duration: "once" | "repeating" | "forever";
+    durationInMonths?: number;
+  };
+  validationErrors?: string[];
+}
+
+export interface CheckoutIntent {
+  id: string;
+  status:
+    | "pending"
+    | "processing"
+    | "requires_action"
+    | "succeeded"
+    | "failed"
+    | "expired";
+  clientSecret: string;
+  offerId: string;
+  offerVersionId: string;
+  customerId?: string;
+  currency: string;
+  subtotal: number;
+  discount: number;
+  tax: number;
+  total: number;
+  trialDays?: number;
+  promotionCode?: string;
+  subscriptionId?: string;
+  expiresAt: string;
+  completedAt?: string;
+  metadata: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface CreateQuoteInput {
+  offerId: string;
+  offerVersionId?: string;
+  promotionCode?: string;
+  customerId?: string;
+}
+
+export interface CreateIntentInput {
+  offerId: string;
+  offerVersionId?: string;
+  customerId?: string;
+  customerEmail?: string;
+  promotionCode?: string;
   trialDays?: number;
   metadata?: Record<string, unknown>;
 }
